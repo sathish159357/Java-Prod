@@ -24,7 +24,7 @@ pipeline {
 
      stage('Trivy FS Scan') {
        steps {
-          sh 'trivy fs --severity HIGH,CRITICAL --exist-code 1 .'
+          sh 'trivy fs --severity HIGH,CRITICAL --exit-code 1 .'
        }
      }
 
@@ -42,7 +42,7 @@ pipeline {
 
      stage('Docker Push') {
         steps {
-           WithCredentials([usernamePassword(
+           withCredentials([usernamePassword(
                credentialsId: 'dockerhub-creds',
                usernameVariable: 'USER',
                passwordVariable: 'PASS'
