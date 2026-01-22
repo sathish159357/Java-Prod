@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: sathish159357/java-prod:IMAGE_TAG
+        image: sathishsk1918/java-prod:IMAGE_TAG
         ports:
         - containerPort: 8080
         envFrom:
