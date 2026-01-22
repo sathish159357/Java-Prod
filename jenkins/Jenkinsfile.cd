@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "sathish159357/java-prod"
-        IMAGE_TAG  = "${BUILD_NUMBER"}
+        IMAGE_TAG  = "${BUILD_NUMBER}"
     }
 
     stages {
