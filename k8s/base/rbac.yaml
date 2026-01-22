@@ -1,0 +1,24 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: jenkins-role
+  namespace: devops-prod
+rules:
+- apiGroups: ["", "apps", "autoscaling", "networking.k8s.io"]
+  resources:
+    - deployments
+    - services
+    - pods
+    - configmaps
+    - secrets
+    - ingresses
+    - horizontalpodautoscalers
+  verbs:
+    - get
+    - list
+    - watch
+    - create
+    - update
+    - patch
+    - delete
+

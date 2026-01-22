@@ -1,0 +1,56 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = "sathish159357/java-prod"
+        IMAGE_TAG  = "${BUILD_NUMBER"}
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/sathish159357/Java-Prod.git.git'
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                withCredentials([
+                  file(credentialsId: 'k8s-jenkins-kubeconfig', variable: 'KUBECONFIG')
+                ]) {
+                    sh '''
+                      kubectl apply -f k8s/base/
+                      kubectl apply -f k8s/deployment/
+                      kubectl apply -f k8s/services/
+                    '''
+                }
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                withCredentials([
+                  file(credentialsId: 'k8s-jenkins-kubeconfig', variable: 'KUBECONFIG')
+                ]) {
+                    sh '''
+                      kubectl rollout status deployment/devops-app -n devops-prod
+                      kubectl get pods -n devops-prod
+                      kubectl get svc -n devops-prod
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "✅ CD Success – Application deployed to Kubernetes"
+        }
+        failure {
+            echo "❌ CD Failed – Deployment issue"
+        }
+    }
+}
+
