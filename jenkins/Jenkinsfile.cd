@@ -21,6 +21,7 @@ pipeline {
                   file(credentialsId: 'k8s-jenkins-kubeconfig', variable: 'KUBECONFIG')
                 ]) {
                     sh '''
+                      export KUBECONFIG=$KUBECONFIG
                       sed -i "s|IMAGE_TAG|${IMAGE_TAG}|g" k8s/app/app-deployment.yaml
                       kubectl apply --validate=false  -f k8s/app/                      
                     '''
